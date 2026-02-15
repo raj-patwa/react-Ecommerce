@@ -4,14 +4,14 @@ import { ShopContext } from '../context/ShopContext'
 import { Link } from 'react-router-dom'
 
 
-const ProductItem = ({ id, image, name, price }) => {
+const ProductItem = ({ _id, image, name, price }) => {
 
   const { currency } = useContext(ShopContext)
   console.log("Image src:", image[0]);
 
 
   return (
-    <Link className='text-gray-600 cursor-pointer' to={`/product/${id}`}>
+    <Link className='text-gray-600 cursor-pointer' to={`/product/${_id}`}>
 
       <div className='overflow-hidden'>
         <img 

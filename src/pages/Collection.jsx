@@ -142,15 +142,16 @@ const Collection = () => {
           {filterProducts.length === 0 ? (
             <p className="text-gray-500">No products found.</p>
           ) : (
-            filterProducts.map((item) => (
-              <ProductItem
-                key={item.id}
-                id={item.id}
-                image={item.image}
-                name={item.name}
-                price={item.price}
-              />
-            ))
+           filterProducts.map((item) => (
+  <ProductItem
+    key={item._id}
+    _id={item._id}
+    image={item.image}
+    name={item.name}
+    price={item.price}
+  />
+))
+
           )}
 
         </div>
