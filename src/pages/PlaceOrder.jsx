@@ -1,14 +1,32 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { useNavigate } from "react-router-dom";
-
-
-
 
 const PlaceOrder = () => {
 
   const { cartItems, products, currency, delivery_fee } = useContext(ShopContext);
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: ""
+  });
+
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
   const cartData = [];
 
   for (const productId in cartItems) {
@@ -30,6 +48,27 @@ const navigate = useNavigate();
     0
   );
 
+  const handlePlaceOrder = () => {
+
+    if (cartData.length === 0) {
+      alert("Your cart is empty 🛒");
+      return;
+    }
+
+    const emptyField = Object.values(formData).some(
+      value => value.trim() === ""
+    );
+
+    if (emptyField) {
+      alert("Please fill all delivery details");
+      return;
+    }
+
+    alert("Order placed successfully 🎉");
+
+    navigate("/order");
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
 
@@ -42,19 +81,19 @@ const navigate = useNavigate();
 
           <h2 className="text-xl font-semibold mb-4">Delivery Information</h2>
 
-          <input className="w-full border p-3 rounded-lg" placeholder="Full Name" />
-          <input className="w-full border p-3 rounded-lg" placeholder="Email Address" />
-          <input className="w-full border p-3 rounded-lg" placeholder="Phone Number" />
-          <input className="w-full border p-3 rounded-lg" placeholder="Street Address" />
+          <input name="name" onChange={handleChange} className="w-full border p-3 rounded-lg" placeholder="Full Name" />
+          <input name="email" onChange={handleChange} className="w-full border p-3 rounded-lg" placeholder="Email Address" />
+          <input name="phone" onChange={handleChange} className="w-full border p-3 rounded-lg" placeholder="Phone Number" />
+          <input name="address" onChange={handleChange} className="w-full border p-3 rounded-lg" placeholder="Street Address" />
 
           <div className="grid grid-cols-2 gap-4">
-            <input className="border p-3 rounded-lg" placeholder="City" />
-            <input className="border p-3 rounded-lg" placeholder="State" />
+            <input name="city" onChange={handleChange} className="border p-3 rounded-lg" placeholder="City" />
+            <input name="state" onChange={handleChange} className="border p-3 rounded-lg" placeholder="State" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <input className="border p-3 rounded-lg" placeholder="Zip Code" />
-            <input className="border p-3 rounded-lg" placeholder="Country" />
+            <input name="zip" onChange={handleChange} className="border p-3 rounded-lg" placeholder="Zip Code" />
+            <input name="country" onChange={handleChange} className="border p-3 rounded-lg" placeholder="Country" />
           </div>
 
         </div>
@@ -89,11 +128,11 @@ const navigate = useNavigate();
           </div>
 
           <button
-  onClick={() => navigate("/order")}
-  className="mt-6 w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition"
->
-  Place Order
-</button>
+            onClick={handlePlaceOrder}
+            className="mt-6 w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition"
+          >
+            Place Order
+          </button>
 
         </div>
 

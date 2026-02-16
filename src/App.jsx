@@ -13,6 +13,8 @@ import Cart from './pages/Cart'
 import Home from './pages/Home'
 import Footer from './components/Footer'
 import SearchBar from './components/SearchBar'
+import Signup from './pages/Signup';
+
 
 const App = () => {
   return (
@@ -29,6 +31,8 @@ const App = () => {
         <Route path='/product/:productId' element={<Product/>}/>
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path="/signup" element={<Signup />} />
+
         <Route path='/place-order' element={<PlaceOrder/>}/>
         <Route path='/order' element={<Orders/>}/>
       </Routes>

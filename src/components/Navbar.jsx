@@ -1,12 +1,23 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
-
 const Navbar = () => {
+
   const [visible, setVisible] = useState(false);
-  const {setShowSearch,getCartCount,removeFromCart}=useContext(ShopContext);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { setShowSearch, getCartCount } = useContext(ShopContext);
+
+  // check login status
+  useEffect(() => {
+    const status = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(status === "true");
+  }, []);
+
   return (
     <div className="flex items-center justify-between py-5 font-medium relative">
 
@@ -33,21 +44,54 @@ const Navbar = () => {
         ))}
       </ul>
 
-      {/* Right Side Icons */}
+      {/* Right Icons */}
       <div className="flex items-center gap-6">
 
-        <img onClick={()=>setShowSearch(true)} src={assets.search_icon} className="w-5 cursor-pointer" alt="" />
+        <img
+          onClick={() => setShowSearch(true)}
+          src={assets.search_icon}
+          className="w-5 cursor-pointer"
+          alt=""
+        />
 
         {/* Profile */}
-        <div className="group relative">
-         <Link to='/login'> <img src={assets.profile_icon} className="w-5 cursor-pointer" alt="" /></Link>
-          <div className="hidden group-hover:block absolute right-0 pt-4">
-            <div className="flex flex-col gap-3 w-32 py-3 px-3 bg-slate-100 text-gray-500 rounded">
-              {/* <p className="cursor-pointer hover:text-black">My Profile</p>
-              <p className="cursor-pointer hover:text-black">Orders</p>
-              <p className="cursor-pointer hover:text-black">Logout</p> */}
+        <div className="relative group">
+
+          <img
+            onClick={() => {
+              if (!isLoggedIn) navigate("/login");
+            }}
+            src={assets.profile_icon}
+            className="w-5 cursor-pointer"
+            alt=""
+          />
+
+          {isLoggedIn && (
+            <div className="hidden group-hover:block absolute right-0 pt-4">
+              <div className="flex flex-col gap-2 w-36 py-3 px-4 bg-white shadow-md rounded text-sm">
+
+                <p
+                  onClick={() => navigate("/order")}
+                  className="cursor-pointer hover:text-black"
+                >
+                  Orders
+                </p>
+
+                <p
+                  onClick={() => {
+                    localStorage.clear();
+                    setIsLoggedIn(false);
+                    navigate("/");
+                  }}
+                  className="cursor-pointer hover:text-black"
+                >
+                  Logout
+                </p>
+
+              </div>
             </div>
-          </div>
+          )}
+
         </div>
 
         {/* Cart */}
@@ -65,38 +109,6 @@ const Navbar = () => {
           className="w-5 cursor-pointer sm:hidden"
           alt=""
         />
-      </div>
-
-      {/* Mobile Menu */}
-      <div
-        className={`fixed top-0 right-0 bottom-0 bg-white z-50 overflow-hidden transition-all duration-300 ${
-          visible ? "w-full" : "w-0"
-        }`}
-      >
-        <div className="flex flex-col text-gray-600">
-          <div
-            onClick={() => setVisible(false)}
-            className="flex items-center gap-4 p-4 cursor-pointer"
-          >
-            <img
-              src={assets.dropdown_icon}
-              className="h-4 rotate-180"
-              alt=""
-            />
-            <p>Back</p>
-          </div>
-
-          {["/", "/collection", "/about", "/contact"].map((path, i) => (
-            <NavLink
-              key={i}
-              to={path}
-              onClick={() => setVisible(false)}
-              className="py-2 pl-6 border"
-            >
-              {path === "/" ? "HOME" : path.replace("/", "").toUpperCase()}
-            </NavLink>
-          ))}
-        </div>
       </div>
     </div>
   );
