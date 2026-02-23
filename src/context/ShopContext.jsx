@@ -46,6 +46,22 @@ const ShopContextProvider = ({ children }) => {
     });
   };
 
+
+const updateQuantity = (itemId, size, quantity) => {
+  setCartItems(prev => {
+    const updated = structuredClone(prev)
+    if (quantity <= 0) {
+      delete updated[itemId][size]
+      if (Object.keys(updated[itemId]).length === 0) {
+        delete updated[itemId]
+      }
+    } else {
+      updated[itemId][size] = quantity
+    }
+    return updated
+  })
+}
+
   // ✅ GET CART COUNT
   const getCartCount = () => {
     let totalCount = 0;
@@ -75,7 +91,8 @@ const ShopContextProvider = ({ children }) => {
     addToCart,
     removeFromCart,
     setShowSearch,
-    getCartCount
+    getCartCount,
+      updateQuantity
   };
 
   return (
