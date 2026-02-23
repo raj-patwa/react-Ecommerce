@@ -14,7 +14,10 @@ const Product = () => {
   useEffect(() => {
     if (!products || products.length === 0) return;
 
-    const item = products.find(p => p._id === productId);
+  const item = products.find(
+  (p) => String(p._id) === String(productId)
+);
+
 
     if (item) {
       setProductData(item);

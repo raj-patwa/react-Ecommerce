@@ -11,9 +11,14 @@ const LatestCollection = () => {
   
   const [latestProduct, setLatestProduct] = useState([]);
 
-  useEffect(()=>{
-      setLatestProduct(products.slice(0,10));
-  },[])
+ useEffect(() => {
+  if (products && products.length > 0) {
+    setLatestProduct(products.slice(0, 10));
+  }
+}, [products]);
+
+  console.log("Latest products:", products);
+
 
   return (
     <div className='my-10'>
@@ -30,13 +35,14 @@ const LatestCollection = () => {
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6'>
         {
           latestProduct.map((item,index)=>(
-            <ProductItem 
-              key={index}
-              id={item.id}
-              image={item.image}
-              name={item.name}
-              price={item.price}
-            />
+           <ProductItem 
+  key={index}
+  _id={item._id}
+  image={item.image}
+  name={item.name}
+  price={item.price}
+/>
+
           ))
         }
       </div>
